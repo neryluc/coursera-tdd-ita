@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +20,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberStringVazia_DeveRetornarListaVazia(){
+    public void testa_stringVazia(){
         // Dado que
         String camelCasedString = "";
 
@@ -33,7 +32,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberApenasUmaPalavraSemCamelCase_DeveRetornarListaComApenasEssaPalavra(){
+    public void testa_nome(){
         // Dado que
         String palavraSemCamelCase = "nome";
 
@@ -45,7 +44,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberUmaPalavraEmCamelCase_DeveRetornarListaComEstaPalavraSemCamelCase(){
+    public void testa_Nome(){
         // Dado que
         String palavraComCamelCase = "Nome";
 
@@ -57,7 +56,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberDuasPalavras_PrimeiraMinusculaSegundaCamelCase_DeveRetornarListaComEssasDuasPalavrasSemCamelCase(){
+    public void testa_nomeCompleto(){
         // Dado que
         String palavrasCamelCase = "nomeCompleto";
 
@@ -71,7 +70,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberDuasPalavrasEmCamelCase_DeveRetornarListaComEssasPalavrasSemCamelCase(){
+    public void testa_NomeCompleto(){
         // Dado que
         String palavrasCamalCase = "NomeCompleto";
 
@@ -85,7 +84,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberStringTodaMaiuscula_DeveRetornarListaComAStringOriginal(){
+    public void testa_CPF(){
         // Dado que
         String palavrasCamalCase = "CPF";
 
@@ -98,7 +97,7 @@ public class CamelCaseParserTest {
     }
 
     @Test
-    public void quandoReceberUmaPalavraSemCamelCaseEUmaPalavraTodaMaiuscula_DeveRetornarListaComAsPalavrasOriginais(){
+    public void testa_nomeCPF(){
         // Dado que
         String palavrasCamalCase = "nomeCPF";
 

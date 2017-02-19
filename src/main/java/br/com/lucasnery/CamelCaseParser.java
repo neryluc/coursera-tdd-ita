@@ -11,15 +11,18 @@ import java.util.List;
 public class CamelCaseParser {
 
     public List<String> converterCamelCase(String original) {
-        if(original == null || original == "")
+        if(stringEstaVazia(original))
             return new ArrayList<String>();
-        else{
-            validarEstrada(original);
-            return separaStringCamelCaseEmListaSemCamelCase(original);
-        }
+
+        validarInputOriginal(original);
+        return separaStringCamelCaseEmListaSemCamelCase(original);
     }
 
-    private void validarEstrada(String original) {
+    public boolean stringEstaVazia(String original){
+        return original == null || original.equals("");
+    }
+
+    private void validarInputOriginal(String original) {
         if(Character.isDigit(original.charAt(0))){
             throw new StringInvalidaException();
         }
@@ -30,34 +33,36 @@ public class CamelCaseParser {
         }
     }
 
+    private boolean podeSepararPalavra(char charA, char charB, char charC){
+        if(Character.isLowerCase(charA) && (Character.isUpperCase(charB) || Character.isDigit(charB)))
+            return true;
+        else if(Character.isDigit(charA) && !Character.isDigit(charB))
+            return true;
+         else if(Character.isUpperCase(charA) && Character.isUpperCase(charB) && Character.isLowerCase(charC))
+             return true;
+        else
+            return false;
+    }
+
+    private ArrayList<String> transformaListaCamelCaseEmListaSemCamelCase(ArrayList<String> listaCamelCase){
+        ArrayList<String> listaSemCamelCase = new ArrayList<String>();
+        for (String palavraCamelCase : listaCamelCase) {
+           listaSemCamelCase.add(parsePalavraCamelCaseParaSemCamelCase(palavraCamelCase));
+        }
+        return listaSemCamelCase;
+    }
+
     private ArrayList<String> separaStringCamelCaseEmListaSemCamelCase(String stringOriginal){
-        ArrayList<String> listaPalavrasSemCamelCase = new ArrayList<String>();
-        char charAtual, charAFrente;
-
-        for(int i = 0; i < stringOriginal.length(); i++){
-            if(i == stringOriginal.length() - 1) {
-                listaPalavrasSemCamelCase.add(parsePalavraCamelCaseParaSemCamelCase(stringOriginal));
-            } else if(i != 0) {
-                charAtual = stringOriginal.charAt(i);
-                charAFrente = stringOriginal.charAt(i+1);
-
-                if (Character.isLowerCase(charAtual) && (Character.isUpperCase(charAFrente) || Character.isDigit(charAFrente)) && i!=0) {
-                    listaPalavrasSemCamelCase.add(parsePalavraCamelCaseParaSemCamelCase(stringOriginal.substring(0, i + 1)));
-                    stringOriginal = stringOriginal.substring(i+1);
-                    i = -1;
-                } else if (Character.isDigit(charAtual) && !Character.isDigit(charAFrente) && i!=0) {
-                    listaPalavrasSemCamelCase.add(parsePalavraCamelCaseParaSemCamelCase(stringOriginal.substring(0, i + 1)));
-                    stringOriginal = stringOriginal.substring(i+1);
-                    i = -1;
-                } else if (Character.isUpperCase(charAtual) && (Character.isDigit(charAFrente) || Character.isLowerCase(charAFrente)) && i!=0) {
-                    listaPalavrasSemCamelCase.add(parsePalavraCamelCaseParaSemCamelCase(stringOriginal.substring(0, i)));
-                    stringOriginal = stringOriginal.substring(i);
-                    i = -1;
-                }
+        ArrayList<String> listaPalavras = new ArrayList<String>();
+        for(int i = 1, ultimoIndice = 0; i < stringOriginal.length(); i++){
+            if(i == stringOriginal.length() - 1){
+                listaPalavras.add(stringOriginal.substring(ultimoIndice));
+            } else if(podeSepararPalavra(stringOriginal.charAt(i-1), stringOriginal.charAt(i), stringOriginal.charAt(i+1))){
+                listaPalavras.add(stringOriginal.substring(ultimoIndice, i));
+                ultimoIndice = i;
             }
         }
-
-        return listaPalavrasSemCamelCase;
+        return transformaListaCamelCaseEmListaSemCamelCase(listaPalavras);
     }
 
     private String parsePalavraCamelCaseParaSemCamelCase(String palavraCamelCase) {
